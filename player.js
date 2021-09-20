@@ -27,9 +27,17 @@ export class Player {
             if (Math.random() > 0.1) {
                 this.skids.push(new Skid(6, this.x, this.y + 14));
             }
-        } else if (keys_pressed.down) {
-            if (Math.random() > 0.2) {
-                this.skids.push(new Skid(4, this.x, this.y + 74));
+        } 
+        if (keys_pressed.down) {
+            if (this.y < 336) {
+                this.y += 4 * fps_ratio;
+                if (Math.random() > 0.2) {
+                    this.skids.push(new Skid(8, this.x, this.y + 74));
+                }
+            }
+        } else if (keys_pressed.up) {
+            if (this.y > 240) {
+                this.y -= 2 * fps_ratio;
             }
         }
 
