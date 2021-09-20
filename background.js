@@ -2,15 +2,9 @@ export let background = {
     tick: 0,
     y: 0,
     grass: [],
-    draw: function(ctx, draw_sprite, fps_ratio) {
-        this.tick += 1 * fps_ratio;
-        ctx.fillStyle = "#807E78";
-        ctx.fillRect(0, 0, 240, 598);
-        draw_sprite.wall_left(0, this.y);
-        draw_sprite.wall_left(0, this.y - 598);
-        draw_sprite.wall_right(240, this.y);
-        draw_sprite.wall_right(240, this.y - 598);
-        this.y += 8 * fps_ratio;
+    update: function(keys_pressed, ratio) {
+        this.tick += 1 * ratio;
+        this.y += 8 * ratio;
         if (this.y >= 598) {
             this.y = 0;
         }
@@ -23,11 +17,22 @@ export let background = {
         }
 
         for (let i = 0; i < this.grass.length; i++) {
-            let tile = this.grass[i];
-            draw_sprite.grass(tile.i, tile.x, tile.y);
-            tile.y += 8 * fps_ratio;
+            this.grass[i].y += 8 * ratio;
         }
         this.grass = this.grass.filter(function(tile) {return (tile.y < 598) });
+    },
+    draw: function(ctx, draw_sprite) {
+        ctx.fillStyle = "#0e6b00";
+        ctx.fillRect(0, 0, ctx.width, ctx.height);
+        ctx.fillStyle = "#807E78";
+        ctx.fillRect(0, 0, 240, ctx.height);
+        draw_sprite.wall_left(0, this.y);
+        draw_sprite.wall_left(0, this.y - 598);
+        draw_sprite.wall_right(240, this.y);
+        draw_sprite.wall_right(240, this.y - 598);
+        for (let i = 0; i < this.grass.length; i++) {
+            draw_sprite.grass(this.grass[i].i, this.grass[i].x, this.grass[i].y);
+        }
     }
 }
 

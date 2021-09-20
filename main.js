@@ -2,6 +2,7 @@
 const gamediv = document.getElementById("game");
 const canvas = document.getElementById("game-layer");
 const ctx = canvas.getContext("2d");
+ctx.width = canvas.width; ctx.height = canvas.height;
 const fps_ratio = ms => { return Math.min(ms / (1000 / 60), 2) }
 
 let player;
@@ -183,6 +184,7 @@ function startGame() {
     ctx.clearRect(0,0,canvas.width,canvas.height)
     gameOver = false;
     timer = 0;
+    then = Date.now();
     /* Start game loop by drawing the first frame */
     player = new Player();
     draw();
@@ -193,18 +195,17 @@ function startGame() {
 */
 
 function draw() {
-    let now = Date.now()
-    let delta = now - then;
-
     if (gamePaused == true) {
         drawPauseScreen();
         requestAnimationFrame(draw);
         return;
     }
-    ctx.fillStyle = "#0e6b00";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let now = Date.now();
+    let delta = now - then;
     let ratio = fps_ratio(delta);
-    background.draw(ctx, draw_sprite, ratio);
+
+    // update objects
+    background.update(keys_pressed, ratio);
     player.update(keys_pressed, ratio);
 
     /* If the player is dying, tick down the timer that will cause a gameOver soon */
@@ -216,7 +217,10 @@ function draw() {
     } else {
         if (player.crashed) {timer = 60}
     }
-    draw_sprite.pink_up(player.x, player.y);
+
+    // draw objects
+    background.draw(ctx, draw_sprite);
+    player.draw(ctx, draw_sprite);
     
     if (gameOver) {
         drawGameOver();

@@ -21,4 +21,8 @@ export class Player {
             this.crashed = true;
         }
     }
+
+    draw(ctx, draw_sprite) {
+        draw_sprite.pink_up(this.x, this.y);
+    }
 }
