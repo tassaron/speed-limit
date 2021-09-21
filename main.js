@@ -5,12 +5,10 @@ const ctx = canvas.getContext("2d");
 ctx.width = canvas.width; ctx.height = canvas.height;
 const fps_ratio = ms => { return Math.min(ms / (1000 / 60), 2) }
 
-let player;
+let game;
 let timer = 0;
 let mouseX = 0;
 let mouseY = 0;
-let gameOver = false;
-let gamePaused = false;
 let then = Date.now();
 
 let keys_pressed = {
@@ -20,8 +18,7 @@ let keys_pressed = {
     "right": false
 };    
 
-import { background } from './background.js';
-import { Player } from './player.js';
+import { Game } from './game.js';
 
 /*
 *  PRELOAD ASSETS
@@ -77,7 +74,7 @@ function touchStartHandler(e) {
 }
 
 function touchEndHandler(e) {
-    if (gameOver == true && gamePaused == false) {
+    if (game.game_over == true && game.paused == false) {
         startGame();
     }
     e.preventDefault();
@@ -115,7 +112,7 @@ function mouseMoveHandler(e) {
 
 function mouseDownHandler(e) {
     if (e.button == 0) {
-        if (gameOver == true && gamePaused == false) {
+        if (game.game_over == true && game.paused == false) {
             startGame();
         }
     } else if (e.button > 0) {
@@ -130,8 +127,10 @@ function keyDownHandler(e) {
         keys_pressed.left = true;
     } else if (e.keyCode == 38) {
         keys_pressed.up = true;
+        e.preventDefault();
     } else if (e.keyCode == 40) {
         keys_pressed.down = true;
+        e.preventDefault();
     }
 }
 
@@ -144,7 +143,7 @@ function keyUpHandler(e) {
         keys_pressed.up = false;
     } else if (e.keyCode == 40) {
         keys_pressed.down = false;
-    } else if (e.keyCode == 32 && gameOver == true && gamePaused == false) {
+    } else if (e.keyCode == 32 && game.game_over == true && game.paused == false) {
         startGame();
     } else if (e.keyCode == 80) {
         pauseGame();
@@ -155,22 +154,36 @@ function keyUpHandler(e) {
 /*
 *  DRAWING FUNCTIONS
 */
+function darkenCanvas() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
 function drawGameOver() {
+    darkenCanvas();
+    ctx.fillStyle = "#000";
+    ctx.fillRect(canvas.width / 4, (canvas.height / 2) - canvas.height / 6, canvas.width / 2, canvas.height / 4);
+    ctx.fillStyle = "#800000";
+    ctx.fillRect((canvas.width / 4) + 2, ((canvas.height / 2) - canvas.height / 6) + 2, (canvas.width / 2) - 4, (canvas.height / 4) - 4);
     ctx.font = "36pt Sans";
-    ctx.fillStyle = "#33aaff";
+    ctx.fillStyle = "#fff";
     ctx.fillText("Game Over", canvas.width / 2 - 132, canvas.height / 2 - 32);
     ctx.font = "16pt Sans";
     ctx.fillText("tap or click to restart", canvas.width / 2 - 92, canvas.height / 2 + 22);
 }
 
 function drawPauseScreen() {
+    ctx.fillStyle = "#000";
+    ctx.fillRect(canvas.width / 4, (canvas.height / 2) - canvas.height / 6, canvas.width / 2, canvas.height / 4);
+    ctx.fillStyle = "#fff";
+    ctx.fillRect((canvas.width / 4) + 2, ((canvas.height / 2) - canvas.height / 6) + 2, (canvas.width / 2) - 4, (canvas.height / 4) - 4);
     ctx.font = "36pt Sans";
     ctx.fillStyle = "#000";
-    ctx.fillText("Paused", canvas.width / 2 - 90, canvas.height / 2);
+    ctx.fillText("Paused", canvas.width / 2 - 86, canvas.height / 2 - 6);
 }
 
 const draw_sprite = {
-    pink_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 0, 32, 78, x, y, 32, 78)},
+    pink_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 0, 32, 79, x, y, 32, 79)},
     blue_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79, 32, 78, x, y, 32, 78)},
     wall_left: function(x, y) {ctx.drawImage(sprites.walls, 40, 0, 39, 598, x, y, 39, 598)},
     wall_right: function(x, y) {ctx.drawImage(sprites.walls, 0, 0, 39, 598, x, y, 39, 598)},
@@ -185,12 +198,11 @@ function initGame() {
 
 function startGame() {
     /* Starts a new game */
-    ctx.clearRect(0,0,canvas.width,canvas.height)
-    gameOver = false;
+    game = new Game()
     timer = 0;
+    ctx.clearRect(0,0,canvas.width,canvas.height)
     then = Date.now();
     /* Start game loop by drawing the first frame */
-    player = new Player();
     draw();
 }
 
@@ -199,7 +211,7 @@ function startGame() {
 */
 
 function draw() {
-    if (gamePaused == true) {
+    if (game.paused == true) {
         drawPauseScreen();
         requestAnimationFrame(draw);
         return;
@@ -208,25 +220,21 @@ function draw() {
     let delta = now - then;
     let ratio = fps_ratio(delta);
 
-    // update objects
-    background.update(keys_pressed, ratio);
-    player.update(keys_pressed, ratio);
+    game.update(keys_pressed, ratio);
 
-    /* If the player is dying, tick down the timer that will cause a gameOver soon */
+    /* If the player is dying, tick down the timer that will cause a game_over soon */
     if (timer > 0) {
         timer -= 1 * ratio;
         if (timer < 1) {
-            gameOver = true;
+            game.game_over = true;
         }
     } else {
-        if (player.crashed) {timer = 60}
+        if (game.player.crashed) {timer = 60}
     }
 
-    // draw objects
-    background.draw(ctx, draw_sprite);
-    player.draw(ctx, draw_sprite);
+    game.draw(ctx, draw_sprite);
     
-    if (gameOver) {
+    if (game.game_over) {
         drawGameOver();
     }
     requestAnimationFrame(draw);
@@ -234,5 +242,8 @@ function draw() {
 }
 
 function pauseGame() {
-    gamePaused = !gamePaused;
+    game.paused = !game.paused;
+    if (game.paused) {
+        darkenCanvas();
+    }
 }
