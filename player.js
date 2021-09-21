@@ -1,15 +1,17 @@
 export class Player {
-    constructor() {
+    constructor(fuel, hp) {
         this.x = 104;
         this.y = 340;
         this.width = 32;
         this.crashed = false;
         this.skids = [];
+        this.fuel = fuel;
+        this.hp = hp;
     }
 
     update(keys_pressed, fps_ratio) {
         for (let skid of this.skids) {
-            skid.age += 1 * fps_ratio;
+            skid.age += fps_ratio;
             skid.y += skid.v * fps_ratio;
         }
         this.skids = this.skids.filter(function(skid) {return (skid.age < 60 - (30 - skid.v)) });
@@ -17,6 +19,7 @@ export class Player {
             this.y += 8 * fps_ratio;
             return
         }
+        this.fuel -= fps_ratio;
         if (keys_pressed.left) {
             this.x -= 4 * fps_ratio;
             if (Math.random() > 0.1) {
@@ -41,7 +44,7 @@ export class Player {
             }
         }
 
-        if (this.x + this.width > 240 || this.x < 40) {
+        if (this.x + this.width > 240 || this.x < 40 || this.fuel < 1) {
             this.crashed = true;
         }
     }

@@ -1,6 +1,6 @@
 export let meters = {
     draw: function(ctx, game) {
-        drawFuel(ctx, game.fuel, game.max_fuel);
+        drawFuel(ctx, game.player.fuel, game.max_fuel);
     }
 }
 

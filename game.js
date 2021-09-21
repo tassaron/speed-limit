@@ -4,16 +4,15 @@ import { background } from './background.js';
 
 export class Game {
     constructor () {
-        this.player = new Player();
         this.level = 0;
         this.score = 0;
-        this.fuel = 50.0;
-        this.max_fuel = 100.0;
-        this.damage = 100.0;
+        this.max_fuel = 2000.0;
+        this.max_hp = 100.0;
         this.progress = 0.0;
         this.paused = false;
         this.in_menu = false;
         this.game_over = false;
+        this.player = new Player(this.max_fuel, this.max_hp);
     }
 
     update(keys_pressed, ratio) {
