@@ -18,6 +18,11 @@ export class Game {
     update(keys_pressed, ratio) {
         background.update(keys_pressed, ratio);
         this.player.update(keys_pressed, ratio);
+        this.progress += ratio;
+        if (this.progress > this.level * 6000) {
+            this.level += 1;
+            this.progress = 0.0;
+        }
     }
 
     draw(ctx, draw_sprite) {
