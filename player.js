@@ -46,7 +46,7 @@ export class Player {
             }
         }
 
-        if (this.x + this.width > 240 || this.x < 40 || this.fuel < 1) {
+        if (this.x + this.width > 240 || this.x < 40 || this.fuel < 1 || this.hp < 1) {
             this.crashed = true;
         }
     }

@@ -2,6 +2,7 @@ import { Player } from './player.js';
 import { meters } from './meters.js';
 import { background } from './background.js';
 import { Fuel } from './fuel.js';
+import { Cone } from './cone.js';
 import { OncomingTraffic, ParallelTraffic } from './traffic.js';
 
 export class Game {
@@ -16,6 +17,7 @@ export class Game {
         this.fuel_pickup = null;
         this.parallel_traffic = null;
         this.oncoming_traffic = null;
+        this.cone = null;
         this.player = new Player(this.max_fuel, this.max_hp);
     }
 
@@ -60,6 +62,17 @@ export class Game {
                 this.oncoming_traffic = new OncomingTraffic();
             }
         }
+
+        if (this.cone != null) {
+            this.cone.update(ratio, this.player);
+            if (this.cone.collected || this.cone.y > 598) {
+                this.cone = null;
+            }
+        } else {
+            if (Math.random() > (1.0 - (this.level / 1000))) {
+                this.cone = new Cone();
+            }
+        }
     }
 
     draw(ctx, draw_sprite) {
@@ -68,6 +81,9 @@ export class Game {
             meters.draw(ctx, this);
         }
         this.player.draw(ctx, draw_sprite)
+        if (this.cone) {
+            draw_sprite.cone(this.cone.x, this.cone.y);
+        }
         if (this.fuel_pickup) {
             draw_sprite.fuel(this.fuel_pickup.x, this.fuel_pickup.y);
         }
