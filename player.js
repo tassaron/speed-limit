@@ -1,6 +1,6 @@
 export class Player {
     constructor(fuel, hp) {
-        this.x = 104;
+        this.x = 114;
         this.y = 340;
         this.height = 79;
         this.width = 32;
@@ -8,6 +8,7 @@ export class Player {
         this.skids = [];
         this.fuel = fuel;
         this.hp = hp;
+        this.score = 0;
     }
 
     update(keys_pressed, fps_ratio) {
@@ -55,6 +56,10 @@ export class Player {
             draw_sprite.skid(skid.x, skid.y);
         }
         draw_sprite.pink_up(this.x, this.y);
+    }
+
+    collides(other) {
+        return (this.x + this.width > other.x && this.x < other.x + other.width && other.y + other.height > this.y && other.y < this.y + this.height);
     }
 }
 

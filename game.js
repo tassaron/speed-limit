@@ -2,12 +2,11 @@ import { Player } from './player.js';
 import { meters } from './meters.js';
 import { background } from './background.js';
 import { Fuel } from './fuel.js';
-import { ParallelTraffic } from './traffic.js';
+import { OncomingTraffic, ParallelTraffic } from './traffic.js';
 
 export class Game {
     constructor () {
         this.level = 0;
-        this.score = 0;
         this.max_fuel = 2000.0;
         this.max_hp = 100.0;
         this.progress = 0.0;
@@ -16,6 +15,7 @@ export class Game {
         this.game_over = false;
         this.fuel_pickup = null;
         this.parallel_traffic = null;
+        this.oncoming_traffic = null;
         this.player = new Player(this.max_fuel, this.max_hp);
     }
 
@@ -23,7 +23,7 @@ export class Game {
         background.update(keys_pressed, ratio);
         this.player.update(keys_pressed, ratio);
         this.progress += ratio;
-        if (this.progress > this.level * 6000) {
+        if (this.progress > this.level * 1000) {
             this.level += 1;
             this.progress = 0.0;
             this.player.fuel = this.max_fuel;
@@ -50,6 +50,17 @@ export class Game {
         } else {
             this.parallel_traffic = new ParallelTraffic();
         }
+
+        if (this.oncoming_traffic != null) {
+            this.oncoming_traffic.update(ratio, this.player);
+            if (this.oncoming_traffic.y > 598) {
+                this.oncoming_traffic = null;
+            }
+        } else {
+            if (Math.random() > (1.0 - (this.level / 1000))) {
+                this.oncoming_traffic = new OncomingTraffic();
+            }
+        }
     }
 
     draw(ctx, draw_sprite) {
@@ -63,6 +74,9 @@ export class Game {
         }
         if (this.parallel_traffic) {
             draw_sprite.blue_up(this.parallel_traffic.x, this.parallel_traffic.y);
+        }
+        if (this.oncoming_traffic) {
+            draw_sprite.blue_down(this.oncoming_traffic.x, this.oncoming_traffic.y);
         }
     }
 }

@@ -1,6 +1,7 @@
 export let meters = {
     draw: function(ctx, game) {
         drawLevel(ctx, game.level, game.progress);
+        drawScore(ctx, game.player.score);
         drawFuel(ctx, game.player.fuel, game.max_fuel);
     }
 }
@@ -11,7 +12,13 @@ function drawLevel(ctx, level, progress) {
     ctx.fillText(`Level ${level}`, 340, 90);
     ctx.fillRect(340, 92, 100, 2);
     ctx.font = "16pt Sans";
-    ctx.fillText(`${Math.floor((level * 6000) - progress)}km until next level`, 340, 118);
+    ctx.fillText(`${Math.floor((level * 1000) - progress)}km until next level`, 340, 118);
+}
+
+function drawScore(ctx, score) {
+    ctx.fillStyle = "#000";
+    ctx.font = "18pt Sans";
+    ctx.fillText(`Cars Passed: ${score}`, 340, 190);
 }
 
 function drawFuel(ctx, fuel, max_fuel) {

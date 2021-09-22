@@ -9,7 +9,7 @@ export class Fuel {
 
     update(ratio, player) {
         this.y += 8 * ratio;
-        if (player.x + player.width > this.x && player.x < this.x + this.width && this.y + this.height > player.y && this.y < player.y + player.height) {
+        if (player.collides(this)) {
             this.collected = true;
             player.fuel += 500.0;
         }
