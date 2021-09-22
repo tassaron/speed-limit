@@ -1,6 +1,6 @@
 export class Player {
     constructor(fuel, hp) {
-        this.x = 114;
+        this.x = 135;
         this.y = 340;
         this.height = 79;
         this.width = 32;

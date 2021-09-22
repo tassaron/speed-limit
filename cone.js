@@ -1,6 +1,6 @@
 export class Cone {
     constructor() {
-        this.x = 95 + Math.floor(Math.random() * 25);
+        this.x = 105 + Math.floor(Math.random() * 25);
         this.y = -42;
         this.height = 21;
         this.width = 20;
