@@ -8,6 +8,7 @@ export class ParallelTraffic {
         this.passed = false;
         this.crashed = false;
         this.colour = Math.floor(Math.random() * 3);
+        this.aggression = 1;
     }
 
     update(ratio, player) {
@@ -17,10 +18,10 @@ export class ParallelTraffic {
         }
         this.y += ratio;
         if (Math.random() > 0.8) {
-            this.x -= ratio / 2;
+            this.x -= this.aggression * ratio / 2;
         } else {
             if ((this.centre + Math.floor((Math.random() * 10))) - this.x < 0) {
-                this.x -= ratio / 3;
+                this.x -= this.aggression * ratio / 3;
             } else {
                 this.x += ratio;
             }
@@ -28,9 +29,11 @@ export class ParallelTraffic {
         if (player.collides(this)) {
             this.crashed = true;
             player.crashed = true;
-        } else if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height) {
+        } else if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height && (this.y - (player.y + player.height)) < 120) {
             this.passed = true;
             player.score += 1;
+        } else if (this.y < player.y + player.height && this.y + this.height > player.y) {
+            this.aggression = 2;
         }
     }
 
