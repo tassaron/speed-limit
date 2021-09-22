@@ -187,8 +187,13 @@ function drawPauseScreen() {
 
 const draw_sprite = {
     pink_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 0, 32, 79, x, y, 32, 79)},
+    pink_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 0, 32, 79, x, y, 32, 79)},
     blue_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79, 32, 79, x, y, 32, 79)},
     blue_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79, 32, 79, x, y, 32, 79)},
+    blue2_up: function(x, y) {ctx.drawImage(sprites.cars, 138, 79*2, 34, 79, x, y, 34, 79)},
+    blue2_down: function(x, y) {ctx.drawImage(sprites.cars, 102, 79*2, 34, 79, x, y, 34, 79)},
+    green_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79*3+1, 32, 79, x, y, 32, 79)},
+    green_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79*3+1, 32, 79, x, y, 32, 79)},
     wall_left: function(x, y) {ctx.drawImage(sprites.walls, 40, 0, 39, 598, x, y, 39, 598)},
     wall_right: function(x, y) {ctx.drawImage(sprites.walls, 0, 0, 39, 598, x, y, 39, 598)},
     grass: function(i, x, y) {ctx.drawImage(sprites.grass, 32 * i - (i > 6 ? 6 : 0), i > 6 ? 32 : 0, 32, 32, x, y, 32, 32)},

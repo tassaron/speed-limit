@@ -47,7 +47,7 @@ export class Game {
                 this.parallel_traffic = null;
             }
         } else {
-            this.parallel_traffic = new ParallelTraffic(1 ? Math.random() > 0.9 : 2);
+            this.parallel_traffic = new ParallelTraffic(Math.random() < 0.1 ? 2 : 1);
         }
 
         if (this.oncoming_traffic != null) {
@@ -75,7 +75,7 @@ export class Game {
             this.parallel_traffic.draw(draw_sprite);
         }
         if (this.oncoming_traffic) {
-            draw_sprite.blue_down(this.oncoming_traffic.x, this.oncoming_traffic.y);
+            this.oncoming_traffic.draw(draw_sprite);
         }
     }
 }
