@@ -2,6 +2,7 @@ export class Player {
     constructor(fuel, hp) {
         this.x = 104;
         this.y = 340;
+        this.height = 79;
         this.width = 32;
         this.crashed = false;
         this.skids = [];

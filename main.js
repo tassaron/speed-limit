@@ -28,7 +28,8 @@ let sprites = {
     cars: new Image(),
     walls: new Image(),
     grass: new Image(),
-    skid: new Image()
+    skid: new Image(),
+    fuel: new Image()
 }
 
 function preload_success() {
@@ -46,6 +47,8 @@ sprites.grass.addEventListener("load", preload_success)
 sprites.grass.src = "assets/grass.png";
 sprites.skid.addEventListener("load", preload_success)
 sprites.skid.src = "assets/skid.png";
+sprites.fuel.addEventListener("load", preload_success)
+sprites.fuel.src = "assets/fuel.png";
 
 /*
  * CONTROL HANDLERS
@@ -188,7 +191,8 @@ const draw_sprite = {
     wall_left: function(x, y) {ctx.drawImage(sprites.walls, 40, 0, 39, 598, x, y, 39, 598)},
     wall_right: function(x, y) {ctx.drawImage(sprites.walls, 0, 0, 39, 598, x, y, 39, 598)},
     grass: function(i, x, y) {ctx.drawImage(sprites.grass, 32 * i - (i > 6 ? 6 : 0), i > 6 ? 32 : 0, 32, 32, x, y, 32, 32)},
-    skid: function(x, y) {ctx.drawImage(sprites.skid, x, y)}
+    skid: function(x, y) {ctx.drawImage(sprites.skid, x, y)},
+    fuel: function(x, y) {ctx.drawImage(sprites.fuel, x, y)}
 };
 
 function initGame() {
