@@ -26,7 +26,6 @@ export class Game {
         if (this.progress > this.level * 1000) {
             this.level += 1;
             this.progress = 0.0;
-            this.player.fuel = this.max_fuel;
         }
 
         if (this.fuel_pickup != null) {
@@ -48,7 +47,7 @@ export class Game {
                 this.parallel_traffic = null;
             }
         } else {
-            this.parallel_traffic = new ParallelTraffic();
+            this.parallel_traffic = new ParallelTraffic(1 ? Math.random() > 0.9 : 2);
         }
 
         if (this.oncoming_traffic != null) {
@@ -73,7 +72,7 @@ export class Game {
             draw_sprite.fuel(this.fuel_pickup.x, this.fuel_pickup.y);
         }
         if (this.parallel_traffic) {
-            draw_sprite.blue_up(this.parallel_traffic.x, this.parallel_traffic.y);
+            this.parallel_traffic.draw(draw_sprite);
         }
         if (this.oncoming_traffic) {
             draw_sprite.blue_down(this.oncoming_traffic.x, this.oncoming_traffic.y);
