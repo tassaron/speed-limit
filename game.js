@@ -2,6 +2,7 @@ import { Player } from './player.js';
 import { meters } from './meters.js';
 import { background } from './background.js';
 import { Fuel } from './fuel.js';
+import { ParallelTraffic } from './traffic.js';
 
 export class Game {
     constructor () {
@@ -13,8 +14,9 @@ export class Game {
         this.paused = false;
         this.in_menu = false;
         this.game_over = false;
-        this.player = new Player(this.max_fuel, this.max_hp);
         this.fuel_pickup = null;
+        this.parallel_traffic = null;
+        this.player = new Player(this.max_fuel, this.max_hp);
     }
 
     update(keys_pressed, ratio) {
@@ -26,13 +28,27 @@ export class Game {
             this.progress = 0.0;
             this.player.fuel = this.max_fuel;
         }
+
         if (this.fuel_pickup != null) {
             this.fuel_pickup.update(ratio, this.player);
             if (this.fuel_pickup.collected || this.fuel_pickup.y > 598) {
                 this.fuel_pickup = null;
             }
         } else if (this.player.fuel < 1550 & Math.random() > (1.0 - ((this.max_fuel - this.player.fuel)/120000))) {
-            this.fuel_pickup = new Fuel(Math.floor(Math.random() * 180) + 40);
+            let spawn_x = Math.floor(Math.random() * 180) + 40;
+            if (this.parallel_traffic != null && spawn_x + 35 > this.parallel_traffic.x && spawn_x < this.parallel_traffic.x + this.parallel_traffic.width) {
+                spawn_x -= Math.abs(this.parallel_traffic.x - (spawn_x + 35));
+            }
+            this.fuel_pickup = new Fuel(spawn_x);
+        }
+
+        if (this.parallel_traffic != null) {
+            this.parallel_traffic.update(ratio, this.player);
+            if (this.parallel_traffic.y > 598) {
+                this.parallel_traffic = null;
+            }
+        } else {
+            this.parallel_traffic = new ParallelTraffic();
         }
     }
 
@@ -44,6 +60,9 @@ export class Game {
         this.player.draw(ctx, draw_sprite)
         if (this.fuel_pickup) {
             draw_sprite.fuel(this.fuel_pickup.x, this.fuel_pickup.y);
+        }
+        if (this.parallel_traffic) {
+            draw_sprite.blue_up(this.parallel_traffic.x, this.parallel_traffic.y);
         }
     }
 }
