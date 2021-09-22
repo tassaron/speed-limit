@@ -1,27 +1,25 @@
-export class ParallelTraffic {
-    constructor(num) {
-        this.x = 155 + Math.floor((Math.random() * 45));
+class Traffic {
+    constructor(start_x) {
+        this.x = start_x + Math.floor((Math.random() * 45));
+        this.y = -79;
         this.centre = this.x;
-        this.y = -79 * num;
-        this.height = 79 * num;
         this.width = 32;
-        this.passed = false;
+        this.height = 79;
         this.crashed = false;
         this.colour = Math.floor(Math.random() * 3);
-        this.aggression = 1;
     }
 
-    update(ratio, player) {
+    update(ratio, player, speed, swerve=1) {
         if (this.crashed) {
             this.y += 8 * ratio;
             return
         }
-        this.y += ratio;
+        this.y += speed * ratio;
         if (Math.random() > 0.8) {
-            this.x -= this.aggression * ratio / 2;
+            this.x += swerve * ratio / 2;
         } else {
             if ((this.centre + Math.floor((Math.random() * 10))) - this.x < 0) {
-                this.x -= this.aggression * ratio / 3;
+                this.x -= ratio / 3;
             } else {
                 this.x += ratio;
             }
@@ -29,11 +27,23 @@ export class ParallelTraffic {
         if (player.collides(this)) {
             this.crashed = true;
             player.crashed = true;
-        } else if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height && (this.y - (player.y + player.height)) < 120) {
+        }
+    }
+}
+
+export class ParallelTraffic extends Traffic {
+    constructor(num) {
+        super(150);
+        this.passed = false;
+        this.height = 79 * num;
+        this.y = -79 * num;
+    }
+
+    update(ratio, player) {
+        Traffic.prototype.update.call(this, ratio, player, 1, -1);
+        if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height && (this.y - (player.y + player.height)) < 120) {
             this.passed = true;
             player.score += 1;
-        } else if (this.y < player.y + player.height && this.y + this.height > player.y) {
-            this.aggression = 2;
         }
     }
 
@@ -54,36 +64,13 @@ export class ParallelTraffic {
     }
 }
 
-export class OncomingTraffic {
+export class OncomingTraffic extends Traffic {
     constructor() {
-        this.x = 55 + Math.floor((Math.random() * 35));
-        this.centre = this.x;
-        this.y = -79;
-        this.height = 79;
-        this.width = 32;
-        this.crashed = false;
-        this.colour = Math.floor(Math.random() * 3);
+        super(50);
     }
 
     update(ratio, player) {
-        if (this.crashed) {
-            this.y += 8 * ratio;
-            return
-        }
-        this.y += 16 * ratio;
-        if (Math.random() > 0.8) {
-            this.x += ratio / 2;
-        } else {
-            if ((this.centre + Math.floor((Math.random() * 10))) - this.x < 0) {
-                this.x -= ratio / 3;
-            } else {
-                this.x += ratio;
-            }
-        }
-        if (player.collides(this)) {
-            this.crashed = true;
-            player.crashed = true;
-        }
+        Traffic.prototype.update.call(this, ratio, player, 16);
     }
 
     draw(draw_sprite) {
