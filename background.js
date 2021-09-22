@@ -26,6 +26,10 @@ export let background = {
         ctx.fillRect(0, 0, ctx.width, ctx.height);
         ctx.fillStyle = "#807E78";
         ctx.fillRect(0, 0, 240, ctx.height);
+        ctx.fillStyle = "#aaa";
+        for (let i = -900; i < 1000; i += 200) {
+            ctx.fillRect(136, (5.98 * this.tick) + i, 8, 60);
+        }
         draw_sprite.wall_left(0, this.y);
         draw_sprite.wall_left(0, this.y - 598);
         draw_sprite.wall_right(240, this.y);
