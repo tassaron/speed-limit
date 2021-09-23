@@ -70,7 +70,7 @@ export class Player {
             go_up(this);
         }
 
-        if (!keys_pressed.left && !keys_pressed.right && !keys_pressed.up && !keys_pressed.down && keys_pressed.mouse && keys_pressed.mouse_pos[0] < 240 && keys_pressed.mouse_pos[0] > 40) {
+        if (!keys_pressed.left && !keys_pressed.right && !keys_pressed.up && !keys_pressed.down && keys_pressed.mouse && keys_pressed.mouse_pos[0] < 280 && keys_pressed.mouse_pos[0] > 0) {
             // move towards mouseclick
             if (keys_pressed.mouse_pos[0] < this.x) {
                 go_left(this);

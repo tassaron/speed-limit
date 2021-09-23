@@ -6,6 +6,8 @@ const button = {
     "spacing": 70
 }
 
+let old_money = 0;
+
 function repairButton(game) {
     if (game.player.money >= 5000) {
         game.player.money -= 5000;
@@ -35,7 +37,8 @@ function upgradeHpButton(game) {
 }
 
 export let meters = {
-    update: function(keys_pressed, game) {
+    "anim": 60.0,
+    update: function(keys_pressed, ratio, game) {
         switch (keys_pressed.number) {
             case 1:
                 repairButton(game);
@@ -62,13 +65,18 @@ export let meters = {
                 upgradeHpButton(game);
             }
         }
+        this.anim -= ratio;
+        if (this.anim < 0.0 || old_money == game.player.money) {
+            old_money = game.player.money;
+            this.anim = 60.0;
+        }
     },
 
     draw: function(ctx, draw_sprite, game) {
         drawLevel(ctx, game.level, game.progress);
         drawScore(ctx, game.player.score);
-        drawMoney(ctx, game.player.money);
         drawCar(ctx, draw_sprite, game.player);
+        drawMoney(ctx, game.player.money, this.anim);
         drawFuel(ctx, game.player.fuel, game.max_fuel);
         drawHp(ctx, game.player.hp, game.max_hp);
         drawButtons(ctx, game);
@@ -90,10 +98,18 @@ function drawScore(ctx, score) {
     ctx.fillText(`Cars Passed: ${score}`, 340, 102);
 }
 
-function drawMoney(ctx, money) {
+function drawMoney(ctx, money, anim) {
     ctx.fillStyle = "#000";
     ctx.font = "18pt Sans";
     ctx.fillText(`Money: \$${money}`, 340, 128);
+    let difference = money - old_money;
+    if (difference < 0) {
+        ctx.fillStyle = `rgba(255,0,0,${1.0-((60/anim)-1)})`;
+        ctx.fillText(`-\$${Math.abs(difference)}`, 400, 100 + Math.floor(anim));
+    } else if (difference > 0) {
+        ctx.fillStyle = `rgba(0,200,50,${1.0-((60/anim)-1)})`;
+        ctx.fillText(`+\$${difference}`, 400, 100 + Math.floor(anim));
+    }
 }
 
 function drawCar(ctx, draw_sprite, player) {
@@ -147,7 +163,6 @@ function drawButtons(ctx, game) {
         colour = "rgba(55, 55, 200, 0.5)";
     }
 
-    // Repair button
     let outline, colour;
     if (game.player.money >= 5000) {enable()} else {disable()}
     drawButton("1. Repair ($5k)", button.y, outline, colour);

@@ -25,7 +25,7 @@ export class Game {
 
     update(keys_pressed, ratio) {
         background.update(keys_pressed, ratio);
-        meters.update(keys_pressed, this);
+        meters.update(keys_pressed, ratio, this);
         this.player.update(keys_pressed, ratio);
         this.progress += ratio;
         if (this.progress > this.level * 1000) {
