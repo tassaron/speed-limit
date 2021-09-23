@@ -3,7 +3,7 @@ import { meters } from './meters.js';
 import { background } from './background.js';
 import { Fuel } from './fuel.js';
 import { Cone } from './cone.js';
-import { OncomingTraffic, ParallelTraffic } from './traffic.js';
+import { OncomingTraffic, ParallelTraffic, RearTraffic } from './traffic.js';
 
 export class Game {
     constructor () {
@@ -18,6 +18,7 @@ export class Game {
         this.parallel_traffic = null;
         this.oncoming_traffic = null;
         this.cone = null;
+        this.rear_traffic = null;
         this.player = new Player(this.max_fuel, this.max_hp);
     }
 
@@ -49,7 +50,9 @@ export class Game {
                 this.parallel_traffic = null;
             }
         } else {
-            this.parallel_traffic = new ParallelTraffic(Math.random() < 0.1 ? 2 : 1);
+            if (this.rear_traffic === null) {
+                this.parallel_traffic = new ParallelTraffic(Math.random() < 0.08 ? 2 : 1);
+            }
         }
 
         if (this.oncoming_traffic != null) {
@@ -59,7 +62,20 @@ export class Game {
             }
         } else {
             if (Math.random() > (1.0 - (this.level / 1000))) {
-                this.oncoming_traffic = new OncomingTraffic();
+                if (this.rear_traffic != null && this.rear_traffic.y > 300) {
+                    this.oncoming_traffic = new OncomingTraffic();
+                }
+            }
+        }
+
+        if (this.rear_traffic != null) {
+            this.rear_traffic.update(ratio, this.player, this.parallel_traffic, this.oncoming_traffic);
+            if (this.rear_traffic.y < 0 - this.rear_traffic.height || (this.rear_traffic.crashed && this.rear_traffic.y > 598)) {
+                this.rear_traffic = null;
+            }
+        } else {
+            if (this.progress > this.level * 800 && Math.random() > (1.0 - (this.level / 1000)) && (this.parallel_traffic != null && this.parallel_traffic.y < 100)) {
+                this.rear_traffic = new RearTraffic();
             }
         }
 
@@ -92,6 +108,9 @@ export class Game {
         }
         if (this.oncoming_traffic) {
             this.oncoming_traffic.draw(draw_sprite);
+        }
+        if (this.rear_traffic) {
+            this.rear_traffic.draw(draw_sprite);
         }
     }
 }
