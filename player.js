@@ -30,27 +30,57 @@ export class Player {
         }
         this.fuel -= fps_ratio;
 
-        if (keys_pressed.left && this.x > 40) {
-            this.x -= 4 * fps_ratio;
+        function go_left(self) {
+            self.x -= 4 * fps_ratio;
             if (Math.random() > 0.1) {
-                this.skids.push(new Skid(6, this.x, this.y + 14));
+                self.skids.push(new Skid(6, self.x, self.y + 14));
             }
-        } else if (keys_pressed.right && this.x + this.width < 240) {
-            this.x += 4 * fps_ratio;
+        }
+
+        function go_right(self) {
+            self.x += 4 * fps_ratio;
             if (Math.random() > 0.1) {
-                this.skids.push(new Skid(6, this.x, this.y + 14));
+                self.skids.push(new Skid(6, self.x, self.y + 14));
             }
-        } 
-        if (keys_pressed.down) {
-            if (this.y < 580) {
-                this.y += 4 * fps_ratio;
+        }
+
+        function go_down(self) {
+            if (self.y < 580) {
+                self.y += 4 * fps_ratio;
                 if (Math.random() > 0.2) {
-                    this.skids.push(new Skid(8, this.x, this.y + 74));
+                    self.skids.push(new Skid(8, self.x, self.y + 74));
                 }
             }
+        }
+
+        function go_up(self) {
+            if (self.y > -self.height + 20) {
+                self.y -= 2 * fps_ratio;
+            }
+        }
+ 
+        if (keys_pressed.left && this.x > 40) {
+            go_left(this);
+        } else if (keys_pressed.right && this.x + this.width < 240) {
+            go_right(this);
+        } 
+        if (keys_pressed.down) {
+            go_down(this);
         } else if (keys_pressed.up) {
-            if (this.y > -this.height + 20) {
-                this.y -= 2 * fps_ratio;
+            go_up(this);
+        }
+
+        if (!keys_pressed.left && !keys_pressed.right && !keys_pressed.up && !keys_pressed.down && keys_pressed.mouse) {
+            // move towards mouseclick
+            if (keys_pressed.mouse_pos[0] < this.x && keys_pressed.mouse_pos[0] > 40) {
+                go_left(this);
+            } else if (keys_pressed.mouse_pos[0] > this.x + this.width && keys_pressed.mouse_pos[0] < 240) {
+                go_right(this);
+            }
+            if (keys_pressed.mouse_pos[1] < this.y) {
+                go_up(this);
+            } else if (keys_pressed.mouse_pos[1] > this.y + this.height) {
+                go_down(this);
             }
         }
 
