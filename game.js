@@ -13,7 +13,6 @@ export class Game {
         this.max_hp = 100.0;
         this.progress = 0.0;
         this.paused = false;
-        this.in_menu = false;
         this.game_over = false;
         this.fuel_pickup = null;
         this.parallel_traffic = null;
@@ -26,6 +25,7 @@ export class Game {
 
     update(keys_pressed, ratio) {
         background.update(keys_pressed, ratio);
+        meters.update(keys_pressed, this);
         this.player.update(keys_pressed, ratio);
         this.progress += ratio;
         if (this.progress > this.level * 1000) {

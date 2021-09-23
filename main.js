@@ -15,7 +15,8 @@ let keys_pressed = {
     "up": false,
     "down": false,
     "left": false,
-    "right": false
+    "right": false,
+    "number": -1,
 };    
 
 import { Game } from './game.js';
@@ -159,7 +160,10 @@ function keyUpHandler(e) {
         startGame();
     } else if (e.keyCode == 80) {
         pauseGame();
+    } else if (e.keyCode > 47 && e.keyCode < 58) {
+        keys_pressed.number = e.keyCode - 48;
     }
+    console.log(e.keyCode);
     e.preventDefault()
 }
 
