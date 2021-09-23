@@ -70,11 +70,11 @@ export class Player {
             go_up(this);
         }
 
-        if (!keys_pressed.left && !keys_pressed.right && !keys_pressed.up && !keys_pressed.down && keys_pressed.mouse) {
+        if (!keys_pressed.left && !keys_pressed.right && !keys_pressed.up && !keys_pressed.down && keys_pressed.mouse && keys_pressed.mouse_pos[0] < 240 && keys_pressed.mouse_pos[0] > 40) {
             // move towards mouseclick
-            if (keys_pressed.mouse_pos[0] < this.x && keys_pressed.mouse_pos[0] > 40) {
+            if (keys_pressed.mouse_pos[0] < this.x) {
                 go_left(this);
-            } else if (keys_pressed.mouse_pos[0] > this.x + this.width && keys_pressed.mouse_pos[0] < 240) {
+            } else if (keys_pressed.mouse_pos[0] > this.x + this.width) {
                 go_right(this);
             }
             if (keys_pressed.mouse_pos[1] < this.y) {
