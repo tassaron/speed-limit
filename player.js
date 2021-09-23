@@ -17,17 +17,19 @@ export class Player {
             skid.y += skid.v * fps_ratio;
         }
         this.skids = this.skids.filter(function(skid) {return (skid.age < 60 - (30 - skid.v)) });
+
         if (this.crashed) {
             this.y += 8 * fps_ratio;
             return
         }
         this.fuel -= fps_ratio;
-        if (keys_pressed.left) {
+
+        if (keys_pressed.left && this.x > 40) {
             this.x -= 4 * fps_ratio;
             if (Math.random() > 0.1) {
                 this.skids.push(new Skid(6, this.x, this.y + 14));
             }
-        } else if (keys_pressed.right) {
+        } else if (keys_pressed.right && this.x + this.width < 240) {
             this.x += 4 * fps_ratio;
             if (Math.random() > 0.1) {
                 this.skids.push(new Skid(6, this.x, this.y + 14));
@@ -46,8 +48,12 @@ export class Player {
             }
         }
 
-        if (this.x + this.width > 240 || this.x < 40 || this.fuel < 1 || this.hp < 1) {
+        if (this.x + this.width > 240 || this.x < 40) {
+            this.hp -= fps_ratio;
+        }
+        if (this.fuel < 1 || this.hp < 1) {
             this.crashed = true;
+            if (this.hp < 1) {this.hp = 0;}
         }
     }
 
