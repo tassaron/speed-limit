@@ -50,8 +50,8 @@ class Traffic {
                 }
             }
             if (this.crashed) {
-                draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y);
-                draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y + 32);
+                draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y + i);
+                draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y + 32 + i);
             }
         }
     }
