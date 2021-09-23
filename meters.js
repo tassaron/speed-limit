@@ -2,6 +2,7 @@ export let meters = {
     draw: function(ctx, game) {
         drawLevel(ctx, game.level, game.progress);
         drawScore(ctx, game.player.score);
+        drawMoney(ctx, game.player.money);
         drawFuel(ctx, game.player.fuel, game.max_fuel);
         drawHp(ctx, game.player.hp, game.max_hp);
     }
@@ -19,27 +20,33 @@ function drawLevel(ctx, level, progress) {
 function drawScore(ctx, score) {
     ctx.fillStyle = "#000";
     ctx.font = "18pt Sans";
-    ctx.fillText(`Cars Passed: ${score}`, 340, 186);
+    ctx.fillText(`Cars Passed: ${score}`, 340, 180);
+}
+
+function drawMoney(ctx, money) {
+    ctx.fillStyle = "#000";
+    ctx.font = "18pt Sans";
+    ctx.fillText(`Money: \$${money}`, 340, 212);
 }
 
 function drawFuel(ctx, fuel, max_fuel) {
     ctx.fillStyle = "#000";
-    ctx.fillRect(400, 200, 200, 28);
+    ctx.fillRect(400, 226, 200, 28);
     ctx.font = "18pt Sans";
-    ctx.fillText("Fuel", 340, 222);
+    ctx.fillText("Fuel", 340, 248);
     ctx.fillStyle = "#800000";
-    ctx.fillRect(402, 202, 196, 24);
+    ctx.fillRect(402, 228, 196, 24);
     ctx.fillStyle = "#7FFF00";
-    ctx.fillRect(402, 202, (196 / max_fuel) * fuel, 24);
+    ctx.fillRect(402, 228, (196 / max_fuel) * fuel, 24);
 }
 
 function drawHp(ctx, hp, max_hp) {
     ctx.fillStyle = "#000";
-    ctx.fillRect(400, 240, 200, 28);
+    ctx.fillRect(400, 260, 200, 28);
     ctx.font = "18pt Sans";
-    ctx.fillText("HP", 340, 262);
+    ctx.fillText("HP", 340, 282);
     ctx.fillStyle = "#800000";
-    ctx.fillRect(402, 242, 196, 24);
+    ctx.fillRect(402, 262, 196, 24);
     ctx.fillStyle = "#7FFF00";
-    ctx.fillRect(402, 242, (196 / max_hp) * hp, 24);
+    ctx.fillRect(402, 262, (196 / max_hp) * hp, 24);
 }

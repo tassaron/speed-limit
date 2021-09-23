@@ -3,6 +3,7 @@ import { meters } from './meters.js';
 import { background } from './background.js';
 import { Fuel } from './fuel.js';
 import { Cone } from './cone.js';
+import { Coin } from './coin.js';
 import { OncomingTraffic, ParallelTraffic, RearTraffic } from './traffic.js';
 
 export class Game {
@@ -17,6 +18,7 @@ export class Game {
         this.fuel_pickup = null;
         this.parallel_traffic = null;
         this.oncoming_traffic = null;
+        this.coin = null;
         this.cone = null;
         this.rear_traffic = null;
         this.player = new Player(this.max_fuel, this.max_hp);
@@ -62,7 +64,7 @@ export class Game {
             }
         } else {
             if (Math.random() > (1.0 - (this.level / 1000))) {
-                if (this.rear_traffic != null && this.rear_traffic.y > 300) {
+                if ((this.rear_traffic != null && this.rear_traffic.y > 300) || this.rear_traffic === null) {
                     this.oncoming_traffic = new OncomingTraffic();
                 }
             }
@@ -89,6 +91,16 @@ export class Game {
                 this.cone = new Cone();
             }
         }
+        if (this.coin != null) {
+            this.coin.update(ratio, this.player);
+            if (this.coin.collected || this.coin.y > 598) {
+                this.coin = null;
+            }
+        } else {
+            if (Math.floor(this.progress) % 100 == 0 && Math.random() > 0.97) {
+                this.coin = new Coin();
+            }
+        }
     }
 
     draw(ctx, draw_sprite) {
@@ -99,6 +111,9 @@ export class Game {
         this.player.draw(ctx, draw_sprite)
         if (this.cone) {
             draw_sprite.cone(this.cone.x, this.cone.y);
+        }
+        if (this.coin) {
+            this.coin.draw(draw_sprite);
         }
         if (this.fuel_pickup) {
             draw_sprite.fuel(this.fuel_pickup.x, this.fuel_pickup.y);

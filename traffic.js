@@ -70,6 +70,7 @@ export class ParallelTraffic extends Traffic {
         if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height && (this.y - (player.y + player.height)) < 120) {
             this.passed = true;
             player.score += 1;
+            player.money += 500;
         }
     }
 }

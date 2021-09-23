@@ -31,7 +31,8 @@ let sprites = {
     skid: new Image(),
     fuel: new Image(),
     cone: new Image(),
-    explosion: new Image()
+    explosion: new Image(),
+    coin: new Image()
 }
 
 function preload_success() {
@@ -55,6 +56,8 @@ sprites.cone.addEventListener("load", preload_success)
 sprites.cone.src = "assets/cone.png";
 sprites.explosion.addEventListener("load", preload_success)
 sprites.explosion.src = "assets/explosion.png";
+sprites.coin.addEventListener("load", preload_success)
+sprites.coin.src = "assets/coin.png";
 
 /*
  * CONTROL HANDLERS
@@ -206,7 +209,8 @@ const draw_sprite = {
     skid: function(x, y) {ctx.drawImage(sprites.skid, x, y)},
     fuel: function(x, y) {ctx.drawImage(sprites.fuel, Math.floor(x), Math.floor(y))},
     cone: function(x, y) {ctx.drawImage(sprites.cone, Math.floor(x), Math.floor(y))},
-    explosion: function(i, x, y) {ctx.drawImage(sprites.explosion, 32 * i, 0, 32, 32, Math.floor(x), Math.floor(y), 32, 32)}
+    explosion: function(i, x, y) {ctx.drawImage(sprites.explosion, 32 * i, 0, 32, 32, Math.floor(x), Math.floor(y), 32, 32)},
+    coin: function(i, v, x, y) {ctx.drawImage(sprites.coin, 32 * i, 32 * v, 32, 32, Math.floor(x), Math.floor(y), 32, 32)}
 };
 
 function initGame() {

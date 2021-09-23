@@ -2,8 +2,8 @@ export class Fuel {
     constructor(x) {
         this.x = x;
         this.y = -64;
-        this.height = 32;
-        this.width = 35;
+        this.height = 29;
+        this.width = 32;
         this.collected = false;
     }
 

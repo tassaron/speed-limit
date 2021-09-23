@@ -8,6 +8,7 @@ export class Player {
         this.skids = [];
         this.fuel = fuel;
         this.hp = hp;
+        this.money = 0;
         this.score = 0;
         this.anim = 0.0;
     }
