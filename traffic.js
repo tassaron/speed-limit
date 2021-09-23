@@ -1,7 +1,7 @@
 class Traffic {
     constructor(start_x) {
         this.x = start_x + Math.floor((Math.random() * 45));
-        this.y = -79;
+        this.y = -79 * 2;
         this.centre = this.x;
         this.width = 32;
         this.height = 79;
@@ -52,7 +52,7 @@ export class ParallelTraffic extends Traffic {
         super(150);
         this.passed = false;
         this.height = 79 * num;
-        this.y = -79 * num;
+        this.y = (-79 * num) * 2;
     }
 
     update(ratio, player) {

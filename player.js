@@ -34,14 +34,14 @@ export class Player {
             }
         } 
         if (keys_pressed.down) {
-            if (this.y < 336) {
+            if (this.y < 580) {
                 this.y += 4 * fps_ratio;
                 if (Math.random() > 0.2) {
                     this.skids.push(new Skid(8, this.x, this.y + 74));
                 }
             }
         } else if (keys_pressed.up) {
-            if (this.y > 240) {
+            if (this.y > -this.height + 20) {
                 this.y -= 2 * fps_ratio;
             }
         }
