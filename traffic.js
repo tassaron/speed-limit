@@ -7,15 +7,19 @@ class Traffic {
         this.height = 79;
         this.crashed = false;
         this.colour = Math.floor(Math.random() * 3);
+        this.anim = 0.0;
     }
 
     update(ratio, player, speed, swerve=1) {
         if (this.crashed) {
             this.y += 8 * ratio;
+            this.anim += ratio;
         }
         if (player.collides(this)) {
             this.crashed = true;
-            player.crashed = true;
+            if (player.hp > 0) {
+                player.hp -= ratio * 2;
+            };
         }
         if (this.crashed) {return;}
         this.y += speed * ratio;
@@ -32,16 +36,22 @@ class Traffic {
 
     draw(draw_sprite) {
         for (let i = 0; i < this.height; i += 79) {
-            switch(this.colour) {
-                case 0:
-                    draw_sprite.blue_up(this.x, this.y + i);
-                    break;
-                case 1:
-                    draw_sprite.blue2_up(this.x, this.y + i);
-                    break;
-                case 2:
-                    draw_sprite.green_up(this.x, this.y + i);
-                    break;
+            if (this.anim < 10) {
+                switch(this.colour) {
+                    case 0:
+                        draw_sprite.blue_up(this.x, this.y + i);
+                        break;
+                    case 1:
+                        draw_sprite.blue2_up(this.x, this.y + i);
+                        break;
+                    case 2:
+                        draw_sprite.green_up(this.x, this.y + i);
+                        break;
+                }
+            }
+            if (this.crashed) {
+                draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y);
+                draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y + 32);
             }
         }
     }
@@ -74,16 +84,22 @@ export class OncomingTraffic extends Traffic {
     }
 
     draw(draw_sprite) {
-        switch(this.colour) {
-            case 0:
-                draw_sprite.blue_down(this.x, this.y);
-                break;
-            case 1:
-                draw_sprite.blue2_down(this.x, this.y);
-                break;
-            case 2:
-                draw_sprite.green_down(this.x, this.y);
-                break;
+        if (this.anim < 10) {
+            switch(this.colour) {
+                case 0:
+                    draw_sprite.blue_down(this.x, this.y);
+                    break;
+                case 1:
+                    draw_sprite.blue2_down(this.x, this.y);
+                    break;
+                case 2:
+                    draw_sprite.green_down(this.x, this.y);
+                    break;
+            }
+        }
+        if (this.crashed) {
+            draw_sprite.explosion(Math.floor(this.anim/10), this.x, this.y);
+            draw_sprite.explosion(Math.floor(this.anim/10), this.x, this.y + 32);
         }
     }
 }

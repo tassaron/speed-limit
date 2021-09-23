@@ -30,7 +30,8 @@ let sprites = {
     grass: new Image(),
     skid: new Image(),
     fuel: new Image(),
-    cone: new Image()
+    cone: new Image(),
+    explosion: new Image()
 }
 
 function preload_success() {
@@ -52,6 +53,8 @@ sprites.fuel.addEventListener("load", preload_success)
 sprites.fuel.src = "assets/fuel.png";
 sprites.cone.addEventListener("load", preload_success)
 sprites.cone.src = "assets/cone.png";
+sprites.explosion.addEventListener("load", preload_success)
+sprites.explosion.src = "assets/explosion.png";
 
 /*
  * CONTROL HANDLERS
@@ -189,20 +192,21 @@ function drawPauseScreen() {
 }
 
 const draw_sprite = {
-    pink_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 0, 32, 79, x, y, 32, 79)},
-    pink_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 0, 32, 79, x, y, 32, 79)},
-    blue_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79, 32, 79, x, y, 32, 79)},
-    blue_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79, 32, 79, x, y, 32, 79)},
-    blue2_up: function(x, y) {ctx.drawImage(sprites.cars, 138, 79*2, 34, 79, x, y, 34, 79)},
-    blue2_down: function(x, y) {ctx.drawImage(sprites.cars, 102, 79*2, 34, 79, x, y, 34, 79)},
-    green_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79*3+1, 32, 79, x, y, 32, 79)},
-    green_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79*3+1, 32, 79, x, y, 32, 79)},
-    wall_left: function(x, y) {ctx.drawImage(sprites.walls, 40, 0, 39, 598, x, y, 39, 598)},
-    wall_right: function(x, y) {ctx.drawImage(sprites.walls, 0, 0, 39, 598, x, y, 39, 598)},
-    grass: function(i, x, y) {ctx.drawImage(sprites.grass, 32 * i - (i > 6 ? 6 : 0), i > 6 ? 32 : 0, 32, 32, x, y, 32, 32)},
+    pink_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 0, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    pink_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 0, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    blue_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    blue_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    blue2_up: function(x, y) {ctx.drawImage(sprites.cars, 138, 79*2, 34, 79, Math.floor(x), Math.floor(y), 34, 79)},
+    blue2_down: function(x, y) {ctx.drawImage(sprites.cars, 102, 79*2, 34, 79, Math.floor(x), Math.floor(y), 34, 79)},
+    green_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79*3+1, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    green_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79*3+1, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    wall_left: function(x, y) {ctx.drawImage(sprites.walls, 40, 0, 39, 598, Math.floor(x), Math.floor(y), 39, 598)},
+    wall_right: function(x, y) {ctx.drawImage(sprites.walls, 0, 0, 39, 598, Math.floor(x), Math.floor(y), 39, 598)},
+    grass: function(i, x, y) {ctx.drawImage(sprites.grass, 32 * i - (i > 6 ? 6 : 0), i > 6 ? 32 : 0, 32, 32, Math.floor(x), Math.floor(y), 32, 32)},
     skid: function(x, y) {ctx.drawImage(sprites.skid, x, y)},
-    fuel: function(x, y) {ctx.drawImage(sprites.fuel, x, y)},
-    cone: function(x, y) {ctx.drawImage(sprites.cone, x, y)},
+    fuel: function(x, y) {ctx.drawImage(sprites.fuel, Math.floor(x), Math.floor(y))},
+    cone: function(x, y) {ctx.drawImage(sprites.cone, Math.floor(x), Math.floor(y))},
+    explosion: function(i, x, y) {ctx.drawImage(sprites.explosion, 32 * i, 0, 32, 32, Math.floor(x), Math.floor(y), 32, 32)}
 };
 
 function initGame() {

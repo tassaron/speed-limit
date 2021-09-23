@@ -9,6 +9,7 @@ export class Player {
         this.fuel = fuel;
         this.hp = hp;
         this.score = 0;
+        this.anim = 0.0;
     }
 
     update(keys_pressed, fps_ratio) {
@@ -20,6 +21,10 @@ export class Player {
 
         if (this.crashed) {
             this.y += 8 * fps_ratio;
+            this.anim += fps_ratio;
+            if (this.anim > 30) {
+                this.anim = 0.0;
+            }
             return
         }
         this.fuel -= fps_ratio;
@@ -62,6 +67,10 @@ export class Player {
             draw_sprite.skid(skid.x, skid.y);
         }
         draw_sprite.pink_up(this.x, this.y);
+        if (this.crashed) {
+            draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y);
+            draw_sprite.explosion(Math.floor(this.anim/5), this.x, this.y + 32);
+        }
     }
 
     collides(other) {
