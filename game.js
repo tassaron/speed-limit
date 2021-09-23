@@ -106,7 +106,7 @@ export class Game {
     draw(ctx, draw_sprite) {
         background.draw(ctx, draw_sprite);
         if (!this.game_over) {
-            meters.draw(ctx, this);
+            meters.draw(ctx, draw_sprite, this);
         }
         this.player.draw(ctx, draw_sprite)
         if (this.cone) {

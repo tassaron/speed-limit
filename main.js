@@ -7,8 +7,6 @@ const fps_ratio = ms => { return Math.min(ms / (1000 / 60), 2) }
 
 let game;
 let timer = 0;
-let mouseX = 0;
-let mouseY = 0;
 let then = Date.now();
 
 let keys_pressed = {
@@ -17,7 +15,9 @@ let keys_pressed = {
     "left": false,
     "right": false,
     "number": -1,
-};    
+    "mouse": false,
+    "mouse_pos": [0, 0]
+};
 
 import { Game } from './game.js';
 
@@ -72,6 +72,7 @@ function addUIEventListeners() {
     canvas.addEventListener("touchstart", touchStartHandler, false);
     canvas.addEventListener("touchend", touchEndHandler, false);
     canvas.addEventListener("touchmove", touchMoveHandler, false);
+    canvas.addEventListener("mouseup", mouseUpHandler, false);
     canvas.addEventListener("mousedown", mouseDownHandler, false);
     canvas.addEventListener("mousemove", mouseMoveHandler, false);
     document.addEventListener('contextmenu', function (e) {
@@ -83,6 +84,7 @@ function addUIEventListeners() {
 
 function touchStartHandler(e) {
     touchMoveHandler(e);
+    keys_pressed.mouse = true;
     e.preventDefault();
 }
 
@@ -90,6 +92,7 @@ function touchEndHandler(e) {
     if (game.game_over == true && game.paused == false) {
         startGame();
     }
+    keys_pressed.mouse = false;
     e.preventDefault();
 }
 
@@ -97,8 +100,7 @@ function touchMoveHandler(e) {
     // get relative (to canvas and scroll position) coords of touch
     let touch = e.changedTouches[0];
     let scroll_position = document.getScroll();
-    mouseX = touch.pageX - gamediv.offsetLeft + scroll_position[0];
-    mouseY = touch.pageY - gamediv.offsetTop + scroll_position[1];
+    keys_pressed.mouse_pos = [touch.pageX - gamediv.offsetLeft + scroll_position[0], touch.pageY - gamediv.offsetTop + scroll_position[1]];
     e.preventDefault();
 }
 
@@ -119,14 +121,19 @@ document.getScroll = function () {
 function mouseMoveHandler(e) {
     // Get relative (to canvas and scroll position) coords of mouse
     let scroll_position = document.getScroll();
-    mouseX = e.clientX - gamediv.offsetLeft + scroll_position[0];
-    mouseY = e.clientY - gamediv.offsetTop + scroll_position[1];
+    keys_pressed.mouse_pos = [e.clientX - gamediv.offsetLeft + scroll_position[0], e.clientY - gamediv.offsetTop + scroll_position[1]];
+}
+
+function mouseUpHandler(e) {
+    keys_pressed.mouse = false;
 }
 
 function mouseDownHandler(e) {
     if (e.button == 0) {
         if (game.game_over == true && game.paused == false) {
             startGame();
+        } else {
+            keys_pressed.mouse = true;
         }
     } else if (e.button > 0) {
         pauseGame();
@@ -144,6 +151,8 @@ function keyDownHandler(e) {
     } else if (e.keyCode == 40) {
         keys_pressed.down = true;
         e.preventDefault();
+    } else if (e.keyCode > 47 && e.keyCode < 58) {
+        keys_pressed.number = e.keyCode - 48;
     }
 }
 
@@ -161,9 +170,8 @@ function keyUpHandler(e) {
     } else if (e.keyCode == 80) {
         pauseGame();
     } else if (e.keyCode > 47 && e.keyCode < 58) {
-        keys_pressed.number = e.keyCode - 48;
+        keys_pressed.number = -1;
     }
-    console.log(e.keyCode);
     e.preventDefault()
 }
 
@@ -201,6 +209,7 @@ function drawPauseScreen() {
 const draw_sprite = {
     pink_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 0, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
     pink_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 0, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    pink_right: function(x, y) {ctx.drawImage(sprites.cars, 4, 48, 98, 40, x, y, 98, 40)},
     blue_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
     blue_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
     blue2_up: function(x, y) {ctx.drawImage(sprites.cars, 138, 79*2, 34, 79, Math.floor(x), Math.floor(y), 34, 79)},
