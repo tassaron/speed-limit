@@ -63,6 +63,8 @@ export class ParallelTraffic extends Traffic {
         this.passed = false;
         this.height = 79 * num;
         this.y = (-79 * num) * 2;
+        this.coin_anim = 0.0;
+        this.value = Math.floor((Math.random() * 3));
     }
 
     update(ratio, player) {
@@ -70,7 +72,20 @@ export class ParallelTraffic extends Traffic {
         if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height && (this.y - (player.y + player.height)) < 120) {
             this.passed = true;
             player.score += 1;
-            player.money += 500;
+            player.money += (this.value * 500.0) + 500;
+        }
+        if (!this.passed) {
+            this.coin_anim += ratio / 5;
+            if (this.coin_anim > 8) {
+                this.coin_anim = 0.0;
+            }
+        }
+    }
+
+    draw(draw_sprite) {
+        Traffic.prototype.draw.call(this, draw_sprite);
+        if (!this.passed && !this.crashed) {
+            draw_sprite.coin(Math.floor(this.coin_anim), this.value, this.x, this.y - 16);
         }
     }
 }
