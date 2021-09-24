@@ -189,7 +189,7 @@ export class RearTraffic extends Traffic {
         if (traffic != null && Object.getPrototypeOf(player).collides.call(this, traffic)) {
             this.collision = [traffic.x, traffic.x + traffic.width, traffic.y];
         } else if (player.collides(this)) {
-            this.collision = [player.x, traffic.x + player.width, player.y];
+            this.collision = [player.x, player.x + player.width, player.y];
         }
     }
 }
