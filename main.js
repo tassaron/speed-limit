@@ -4,6 +4,11 @@ const canvas = document.getElementById("game-layer");
 const ctx = canvas.getContext("2d");
 ctx.width = canvas.width; ctx.height = canvas.height;
 const fps_ratio = ms => { return Math.min(ms / (1000 / 60), 2) }
+ctx.fillStyle = "#000";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.font = "36pt Sans";
+ctx.fillStyle = "#fff";
+ctx.fillText("Loading...", canvas.width / 2 - 132, canvas.height / 2 - 32);
 
 let game;
 let timer = 0;
