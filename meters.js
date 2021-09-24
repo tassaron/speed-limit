@@ -6,33 +6,42 @@ const button = {
     "spacing": 70
 }
 
+let cooldown = false;
 let old_money = 0;
 
 function repairButton(game) {
+    if (cooldown) {return}
     if (game.player.money >= 5000) {
         game.player.money -= 5000;
         game.player.hp = game.max_hp;
+        cooldown = true;
     }
 }
 
 function refuelButton(game) {
+    if (cooldown) {return}
     if (game.player.money >= 1000) {
         game.player.money -= 1000;
         game.player.fuel = game.max_fuel;
+        cooldown = true;
     }
 }
 
 function upgradeFuelButton(game) {
+    if (cooldown) {return}
     if (game.player.money >= 10000) {
         game.player.money -= 10000;
         game.max_fuel += 500.0;
+        cooldown = true;
     }
 }
 
 function upgradeHpButton(game) {
+    if (cooldown) {return}
     if (game.player.money >= 15000) {
         game.player.money -= 15000;
         game.max_hp += 40.0;
+        cooldown = true;
     }
 }
 
@@ -41,10 +50,10 @@ export let meters = {
     update: function(keys_pressed, ratio, game) {
         switch (keys_pressed.number) {
             case 1:
-                repairButton(game);
+                refuelButton(game);
                 break;
             case 2:
-                refuelButton(game);
+                repairButton(game);
                 break;
             case 3:
                 upgradeFuelButton(game);
@@ -56,9 +65,9 @@ export let meters = {
         let spacing = button.spacing - button.height;
         if (keys_pressed.number < 0 && keys_pressed.mouse && keys_pressed.mouse_pos[0] >= button.x && keys_pressed.mouse_pos[0] <= button.x + button.width) {
             if (keys_pressed.mouse_pos[1] >= button.y && keys_pressed.mouse_pos[1] <= button.y + button.height) {
-                repairButton(game);
-            } else if (keys_pressed.mouse_pos[1] >= button.y + button.height + spacing && keys_pressed.mouse_pos[1] <= button.y + (button.height*2) + spacing) {
                 refuelButton(game);
+            } else if (keys_pressed.mouse_pos[1] >= button.y + button.height + spacing && keys_pressed.mouse_pos[1] <= button.y + (button.height*2) + spacing) {
+                repairButton(game);
             } else if (keys_pressed.mouse_pos[1] >= button.y + (button.height * 2) + (spacing * 2) && keys_pressed.mouse_pos[1] <= button.y + (button.height*3) + (spacing*2)) {
                 upgradeFuelButton(game);
             } else if (keys_pressed.mouse_pos[1] >= button.y + (button.height * 3) + (spacing * 3) && keys_pressed.mouse_pos[1] <= button.y + (button.height*4) + (spacing*3)) {
@@ -69,6 +78,7 @@ export let meters = {
         if (this.anim < 0.0 || old_money == game.player.money) {
             old_money = game.player.money;
             this.anim = 60.0;
+            cooldown = false;
         }
     },
 
@@ -164,10 +174,10 @@ function drawButtons(ctx, game) {
     }
 
     let outline, colour;
-    if (game.player.money >= 5000) {enable()} else {disable()}
-    drawButton("1. Repair ($5k)", button.y, outline, colour);
     if (game.player.money >= 1000) {enable()} else {disable()}
-    drawButton("2. Refuel ($1k)", button.y + button.spacing, outline, colour);
+    drawButton("1. Refuel ($1k)", button.y, outline, colour);
+    if (game.player.money >= 5000) {enable()} else {disable()}
+    drawButton("2. Repair ($5k)", button.y + button.spacing, outline, colour);
     if (game.player.money >= 10000) {enable()} else {disable()}
     drawButton("3. Upgrade Fuel ($10k)", button.y + (button.spacing * 2), outline, colour);
     if (game.player.money >= 15000) {enable()} else {disable()}
