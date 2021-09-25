@@ -97,8 +97,9 @@ export let meters = {
 function drawLevel(ctx, level, progress) {
     ctx.fillStyle = "#000";
     ctx.font = "24pt Sans";
-    ctx.fillText(`Level ${level}`, 340, 50);
-    ctx.fillRect(340, 52, 100, 2);
+    let text = `Level ${level}`;
+    ctx.fillText(text, 340, 50);
+    ctx.fillRect(340, 52, ctx.measureText(text).width, 2);
     ctx.font = "16pt Sans";
     ctx.fillText(`${Math.floor((level * 1000) - progress)}km until next level`, 340, 78);
 }
