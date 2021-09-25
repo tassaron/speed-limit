@@ -218,6 +218,8 @@ function drawGameOver() {
         text = "(yours)";
     } else if (game.player.explosions > 99) {
         text = "(wow!)"
+    } else {
+        text = "";
     }
     text = `${game.player.explosions}${text}`;
     ctx.fillText(text, canvas.width / 4 + 160 - ctx.measureText(text).width / 2, canvas.height / 3 + 260);
