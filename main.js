@@ -191,14 +191,36 @@ function darkenCanvas() {
 function drawGameOver() {
     darkenCanvas();
     ctx.fillStyle = "#000";
-    ctx.fillRect(canvas.width / 4, (canvas.height / 2) - canvas.height / 6, canvas.width / 2, canvas.height / 4);
+    ctx.fillRect(canvas.width / 4, (canvas.height / 3) - canvas.height / 6, canvas.width / 2, canvas.height / 4);
+    ctx.fillRect(canvas.width / 4 + 16, (canvas.height / 3) + 50, canvas.width / 2 - 32, canvas.height / 3 + 44);
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(canvas.width / 4 + 18, (canvas.height / 3) + 52, canvas.width / 2 - 36, (canvas.height / 3) + 40);
     ctx.fillStyle = "#800000";
-    ctx.fillRect((canvas.width / 4) + 2, ((canvas.height / 2) - canvas.height / 6) + 2, (canvas.width / 2) - 4, (canvas.height / 4) - 4);
+    ctx.fillRect((canvas.width / 4) + 2, ((canvas.height / 3) - canvas.height / 6) + 2, (canvas.width / 2) - 4, (canvas.height / 4) - 4);
     ctx.font = "36pt Sans";
     ctx.fillStyle = "#fff";
-    ctx.fillText("Game Over", canvas.width / 2 - 132, canvas.height / 2 - 32);
+    ctx.fillText("Game Over", canvas.width / 2 - 132, canvas.height / 3 - 32);
     ctx.font = "16pt Sans";
-    ctx.fillText("tap or click to restart", canvas.width / 2 - 92, canvas.height / 2 + 22);
+    ctx.fillText("tap or click to restart", canvas.width / 2 - 92, canvas.height / 3 + 22);
+    ctx.fillStyle = "#000";
+    ctx.font = "18pt Serif";
+    ctx.fillText("Cars Passed", canvas.width / 4 + 90, canvas.height / 3 + 90);
+    ctx.fillRect(canvas.width / 4 + 90, canvas.height / 3 + 92, ctx.measureText("Cars Passed").width, 2);
+    ctx.fillText(game.player.score, canvas.width / 4 + 160 - ctx.measureText(game.player.score).width / 2, canvas.height / 3 + 120);
+    ctx.fillText("Money Earned", canvas.width / 4 + 80, canvas.height / 3 + 160);
+    ctx.fillRect(canvas.width / 4 + 80, canvas.height / 3 + 162, ctx.measureText("Money Earned").width, 2);
+    let text = "";
+    text = `\$${Intl.NumberFormat('en-US').format(game.player.total_money)}`;
+    ctx.fillText(text, canvas.width / 4 + 160 - ctx.measureText(text).width / 2, canvas.height / 3 + 190);
+    ctx.fillText("Total Explosions", canvas.width / 4 + 70, canvas.height / 3 + 230);
+    ctx.fillRect(canvas.width / 4 + 70, canvas.height / 3 + 232, ctx.measureText("Total Explosions").width, 2);
+    if (game.player.explosions == 1) {
+        text = "(yours)";
+    } else if (game.player.explosions > 99) {
+        text = "(wow!)"
+    }
+    text = `${game.player.explosions}${text}`;
+    ctx.fillText(text, canvas.width / 4 + 160 - ctx.measureText(text).width / 2, canvas.height / 3 + 260);
 }
 
 function drawPauseScreen() {

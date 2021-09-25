@@ -25,12 +25,14 @@ export class Game {
 
     update(keys_pressed, ratio) {
         background.update(keys_pressed, ratio);
-        meters.update(keys_pressed, ratio, this);
-        this.player.update(keys_pressed, ratio);
-        this.progress += ratio;
-        if (this.progress > this.level * 1000) {
-            this.level += 1;
-            this.progress = 0.0;
+        if (!this.game_over) {
+            meters.update(keys_pressed, ratio, this);
+            this.player.update(keys_pressed, ratio);
+            this.progress += ratio;
+            if (this.progress > this.level * 1000) {
+                this.level += 1;
+                this.progress = 0.0;
+            }
         }
 
         if (this.fuel_pickup != null) {
@@ -105,9 +107,7 @@ export class Game {
 
     draw(ctx, draw_sprite) {
         background.draw(ctx, draw_sprite);
-        if (!this.game_over) {
-            meters.draw(ctx, draw_sprite, this);
-        }
+        meters.draw(ctx, draw_sprite, this);
         this.player.draw(ctx, draw_sprite)
         if (this.cone) {
             draw_sprite.cone(this.cone.x, this.cone.y);

@@ -14,6 +14,7 @@ export class Coin {
         if (player.collides(this)) {
             this.collected = true;
             player.money += (this.value * 500.0) + 500;
+            player.total_money += (this.value * 500.0) + 500;
         }
         this.anim += ratio / 5;
         if (this.anim > 8) {

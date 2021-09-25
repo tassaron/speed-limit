@@ -8,6 +8,7 @@ class Traffic {
         this.crashed = false;
         this.colour = Math.floor(Math.random() * 3);
         this.anim = 0.0;
+        this.exploded = false;
     }
 
     update(ratio, player, speed, swerve=1) {
@@ -21,7 +22,13 @@ class Traffic {
                 player.hp -= ratio * 2;
             };
         }
-        if (this.crashed) {return;}
+        if (this.crashed) {
+            if (!this.exploded) {
+                this.exploded = true;
+                player.explosions += 1;
+            }
+            return;
+        }
         this.y += speed * ratio;
         if (Math.random() > 0.8) {
             this.x += swerve * ratio / 2;
@@ -69,10 +76,12 @@ export class ParallelTraffic extends Traffic {
 
     update(ratio, player) {
         Traffic.prototype.update.call(this, ratio, player, 1, -1);
+        if (this.crashed) {return}
         if (!this.passed && player.x + player.width > this.x + 20 && player.x < this.x + this.width && this.y > player.y + player.height && (this.y - (player.y + player.height)) < 120) {
             this.passed = true;
             player.score += 1;
             player.money += (this.value * 500.0) + 500;
+            player.total_money += (this.value * 500.0) + 500;
         }
         if (!this.passed) {
             this.coin_anim += ratio / 5;

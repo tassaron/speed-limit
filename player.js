@@ -9,8 +9,11 @@ export class Player {
         this.fuel = fuel;
         this.hp = hp;
         this.money = 0;
+        this.total_money = 0;
         this.score = 0;
         this.anim = 0.0;
+        this.explosions = 0;
+        this.exploded = false;
     }
 
     update(keys_pressed, fps_ratio) {
@@ -32,14 +35,14 @@ export class Player {
 
         function go_left(self) {
             self.x -= 4 * fps_ratio;
-            if (Math.random() > 0.1) {
+            if (self.skids.length < 30 && Math.random() > 0.1) {
                 self.skids.push(new Skid(6, self.x, self.y + 14));
             }
         }
 
         function go_right(self) {
             self.x += 4 * fps_ratio;
-            if (Math.random() > 0.1) {
+            if (self.skids.length < 30 && Math.random() > 0.1) {
                 self.skids.push(new Skid(6, self.x, self.y + 14));
             }
         }
@@ -47,7 +50,7 @@ export class Player {
         function go_down(self) {
             if (self.y < 580) {
                 self.y += 4 * fps_ratio;
-                if (Math.random() > 0.2) {
+                if (self.skids.length < 30 && Math.random() > 0.2) {
                     self.skids.push(new Skid(8, self.x, self.y + 74));
                 }
             }
@@ -89,6 +92,10 @@ export class Player {
         }
         if (this.fuel < 1 || this.hp < 1) {
             this.crashed = true;
+            if (!this.exploded) {
+                this.exploded = true;
+                this.explosions += 1;
+            }
             if (this.hp < 1) {this.hp = 0;}
         }
     }

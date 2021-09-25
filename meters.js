@@ -84,6 +84,7 @@ export let meters = {
 
     draw: function(ctx, draw_sprite, game) {
         drawLevel(ctx, game.level, game.progress);
+        if (game.game_over) {return}
         drawScore(ctx, game.player.score);
         drawCar(ctx, draw_sprite, game.player);
         drawMoney(ctx, game.player.money, this.anim);
