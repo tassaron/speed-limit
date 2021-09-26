@@ -32,6 +32,7 @@ import { Game } from './game.js';
 let preloaded = 0;
 let sprites = {
     cars: new Image(),
+    cars2: new Image(),
     walls: new Image(),
     grass: new Image(),
     skid: new Image(),
@@ -50,6 +51,8 @@ function preload_success() {
 
 sprites.cars.addEventListener("load", preload_success)
 sprites.cars.src = "assets/cars_2x.png";
+sprites.cars2.addEventListener("load", preload_success)
+sprites.cars2.src = "assets/mycars.png";
 sprites.walls.addEventListener("load", preload_success)
 sprites.walls.src = "assets/walls.png";
 sprites.grass.addEventListener("load", preload_success)
@@ -245,6 +248,9 @@ const draw_sprite = {
     blue2_down: function(x, y) {ctx.drawImage(sprites.cars, 102, 79*2, 34, 79, Math.floor(x), Math.floor(y), 34, 79)},
     green_up: function(x, y) {ctx.drawImage(sprites.cars, 106, 79*3+1, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
     green_down: function(x, y) {ctx.drawImage(sprites.cars, 140, 79*3+1, 32, 79, Math.floor(x), Math.floor(y), 32, 79)},
+    green2_up: function(x, y) {ctx.drawImage(sprites.cars2, 0, 0, 32, 74, Math.floor(x), Math.floor(y), 32, 74)},
+    red_up: function(x, y) {ctx.drawImage(sprites.cars2, 32, 0, 32, 74, Math.floor(x), Math.floor(y), 32, 74)},
+    yellow_up: function(x, y) {ctx.drawImage(sprites.cars2, 64, 0, 32, 74, Math.floor(x), Math.floor(y), 32, 74)},
     wall_left: function(x, y) {ctx.drawImage(sprites.walls, 40, 0, 39, 598, Math.floor(x), Math.floor(y), 39, 598)},
     wall_right: function(x, y) {ctx.drawImage(sprites.walls, 0, 0, 39, 598, Math.floor(x), Math.floor(y), 39, 598)},
     grass: function(i, x, y) {ctx.drawImage(sprites.grass, 32 * i - (i > 6 ? 6 : 0), i > 6 ? 32 : 0, 32, 32, Math.floor(x), Math.floor(y), 32, 32)},

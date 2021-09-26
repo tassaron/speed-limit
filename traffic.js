@@ -6,7 +6,7 @@ class Traffic {
         this.width = 32;
         this.height = 79;
         this.crashed = false;
-        this.colour = Math.floor(Math.random() * 3);
+        this.colour = Math.floor(Math.random() * 6);
         this.anim = 0.0;
         this.exploded = false;
     }
@@ -53,6 +53,15 @@ class Traffic {
                         break;
                     case 2:
                         draw_sprite.green_up(this.x, this.y + i);
+                        break;
+                    case 3:
+                        draw_sprite.green2_up(this.x, this.y + i);
+                        break;
+                    case 4:
+                        draw_sprite.red_up(this.x, this.y + i);
+                        break;
+                    case 5:
+                        draw_sprite.yellow_up(this.x, this.y + i);
                         break;
                 }
             }
@@ -112,12 +121,15 @@ export class OncomingTraffic extends Traffic {
         if (this.anim < 10) {
             switch(this.colour) {
                 case 0:
+                case 3:
                     draw_sprite.blue_down(this.x, this.y);
                     break;
                 case 1:
+                case 4:
                     draw_sprite.blue2_down(this.x, this.y);
                     break;
                 case 2:
+                case 5:
                     draw_sprite.green_down(this.x, this.y);
                     break;
             }
