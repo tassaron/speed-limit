@@ -121,16 +121,22 @@ export class OncomingTraffic extends Traffic {
         if (this.anim < 10) {
             switch(this.colour) {
                 case 0:
-                case 3:
                     draw_sprite.blue_down(this.x, this.y);
                     break;
                 case 1:
-                case 4:
                     draw_sprite.blue2_down(this.x, this.y);
                     break;
                 case 2:
-                case 5:
                     draw_sprite.green_down(this.x, this.y);
+                    break;
+                case 3:
+                    draw_sprite.green2_down(this.x, this.y);
+                    break;
+                case 4:
+                    draw_sprite.red_down(this.x, this.y);
+                    break;
+                case 5:
+                    draw_sprite.yellow_down(this.x, this.y);
                     break;
             }
         }
