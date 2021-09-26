@@ -34,6 +34,7 @@ export class Player {
         this.fuel -= fps_ratio;
 
         function go_left(self) {
+            if (self.x < 8) {return}
             self.x -= 4 * fps_ratio;
             if (self.skids.length < 30 && Math.random() > 0.1) {
                 self.skids.push(new Skid(6, self.x, self.y + 14));
@@ -41,6 +42,7 @@ export class Player {
         }
 
         function go_right(self) {
+            if (self.x + self.width > 272) {return}
             self.x += 4 * fps_ratio;
             if (self.skids.length < 30 && Math.random() > 0.1) {
                 self.skids.push(new Skid(6, self.x, self.y + 14));
@@ -48,23 +50,21 @@ export class Player {
         }
 
         function go_down(self) {
-            if (self.y < 580) {
-                self.y += 4 * fps_ratio;
-                if (self.skids.length < 30 && Math.random() > 0.2) {
-                    self.skids.push(new Skid(8, self.x, self.y + 74));
-                }
+            if (self.y > 579) {return}
+            self.y += 4 * fps_ratio;
+            if (self.skids.length < 30 && Math.random() > 0.2) {
+                self.skids.push(new Skid(8, self.x, self.y + 74));
             }
         }
 
         function go_up(self) {
-            if (self.y > -self.height + 20) {
-                self.y -= 2 * fps_ratio;
-            }
+            if (self.y < -self.height + 20) {return}
+            self.y -= 2 * fps_ratio;
         }
  
-        if (keys_pressed.left && this.x > 40) {
+        if (keys_pressed.left) {
             go_left(this);
-        } else if (keys_pressed.right && this.x + this.width < 240) {
+        } else if (keys_pressed.right) {
             go_right(this);
         } 
         if (keys_pressed.down) {
@@ -88,7 +88,7 @@ export class Player {
         }
 
         if (this.x + this.width > 240 || this.x < 40) {
-            this.hp -= fps_ratio;
+            this.hp -= fps_ratio / 3;
         }
         if (this.fuel < 1 || this.hp < 1) {
             this.crashed = true;
