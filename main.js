@@ -105,17 +105,16 @@ function touchEndHandler(e) {
 }
 
 function touchMoveHandler(e) {
-    // get relative (to canvas and scroll position) coords of touch
+    // get relative (to canvas) coords of touch
     let touch = e.changedTouches[0];
-    let scroll_position = document.getScroll();
-    keys_pressed.mouse_pos = [touch.pageX - gamediv.offsetLeft + scroll_position[0], touch.pageY - gamediv.offsetTop + scroll_position[1]];
+    keys_pressed.mouse_pos = [touch.pageX - gamediv.offsetLeft, touch.pageY - gamediv.offsetTop];
     e.preventDefault();
 }
 
 document.getScroll = function () {
     // https://stackoverflow.com/revisions/2481776/3
-    if (window.pageYOffset != undefined) {
-        return [pageXOffset, pageYOffset];
+    if (window.scrollY != undefined) {
+        return [scrollX, scrollY];
     } else {
         let sx, sy, d = document,
             r = d.documentElement,
