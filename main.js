@@ -1,6 +1,8 @@
 "use strict";
 const gamediv = document.getElementById("game");
-const canvas = document.getElementById("game-layer");
+const canvas = document.createElement("canvas");
+gamediv.appendChild(canvas);
+canvas.width = gamediv.offsetWidth; canvas.height = gamediv.offsetHeight;
 const ctx = canvas.getContext("2d");
 ctx.width = canvas.width; ctx.height = canvas.height;
 const fps_ratio = ms => { return Math.min(ms / (1000 / 60), 2) }
@@ -49,24 +51,25 @@ function preload_success() {
     }
 }
 
+const prefix = "/static/client/rainey_arcade/js/speed-limit/assets/";
 sprites.cars.addEventListener("load", preload_success)
-sprites.cars.src = "assets/cars_2x.png";
+sprites.cars.src = prefix + "cars_2x.png";
 sprites.cars2.addEventListener("load", preload_success)
-sprites.cars2.src = "assets/mycars.png";
+sprites.cars2.src = prefix + "mycars.png";
 sprites.walls.addEventListener("load", preload_success)
-sprites.walls.src = "assets/walls.png";
+sprites.walls.src = prefix + "walls.png";
 sprites.grass.addEventListener("load", preload_success)
-sprites.grass.src = "assets/grass.png";
+sprites.grass.src = prefix + "grass.png";
 sprites.skid.addEventListener("load", preload_success)
-sprites.skid.src = "assets/skid.png";
+sprites.skid.src = prefix + "skid.png";
 sprites.fuel.addEventListener("load", preload_success)
-sprites.fuel.src = "assets/fuel.png";
+sprites.fuel.src = prefix + "fuel.png";
 sprites.cone.addEventListener("load", preload_success)
-sprites.cone.src = "assets/cone.png";
+sprites.cone.src = prefix + "cone.png";
 sprites.explosion.addEventListener("load", preload_success)
-sprites.explosion.src = "assets/explosion.png";
+sprites.explosion.src = prefix + "explosion.png";
 sprites.coin.addEventListener("load", preload_success)
-sprites.coin.src = "assets/coin.png";
+sprites.coin.src = prefix + "coin.png";
 
 /*
  * CONTROL HANDLERS
@@ -297,11 +300,13 @@ function draw() {
     /* If the player is dying, tick down the timer that will cause a game_over soon */
     if (timer > 0) {
         timer -= 1 * ratio;
-        if (timer < 1) {
+        if (timer < 1 && timer != 0) {
+            timer = 0;
             game.game_over = true;
+            show_send_score_button();
         }
     } else {
-        if (game.player.crashed) {timer = 60}
+        if (!game.game_over && game.player.crashed) {timer = 60}
     }
 
     game.draw(ctx, draw_sprite);
@@ -317,5 +322,24 @@ function pauseGame() {
     game.paused = !game.paused;
     if (game.paused) {
         darkenCanvas();
+    }
+}
+
+function show_send_score_button() {
+    // If embedded on Rainey Arcade, integrate with the send_score_button
+    const send_score_button = document.getElementById("send_score_button");
+    if (send_score_button) {
+        function sendScore(e) {
+            send_score(
+                document.getElementById("game_title").dataset.filename,
+                game.player.money,
+                send_score_button.dataset.csrfToken,
+            );
+            e.currentTarget.setAttribute("style", "display: none;");
+            e.currentTarget.removeEventListener("click", sendScore);
+            e.stopPropagation();
+        }
+        send_score_button.setAttribute("style", "z-index: 100; display: block; left: 50%; top: 50%; transform: translate(-50%);");
+        send_score_button.addEventListener("click", sendScore);
     }
 }
