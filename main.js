@@ -273,6 +273,7 @@ function initGame() {
 
 function startGame() {
     /* Starts a new game */
+    hide_send_score_button();
     game = new Game()
     timer = 0;
     ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -339,7 +340,7 @@ function show_send_score_button() {
             e.currentTarget.removeEventListener("click", sendScore);
             e.stopPropagation();
         }
-        send_score_button.setAttribute("style", "z-index: 100; display: block; left: 50%; top: 50%; transform: translate(-50%);");
+        send_score_button.setAttribute("style", "z-index: 100; display: block; left: 50%; bottom: 1em; transform: translate(-50%);");
         send_score_button.addEventListener("click", sendScore);
     }
 }
