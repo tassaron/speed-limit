@@ -1,4 +1,8 @@
 "use strict";
+
+// from the Rainey Arcade parent repo
+import { send_score, hide_send_score_button } from "../send_score.js";
+
 const gamediv = document.getElementById("game");
 const canvas = document.createElement("canvas");
 gamediv.appendChild(canvas);
